@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace chuteDelay
 {
@@ -36,30 +37,61 @@ namespace chuteDelay
 			base.OnActive ();
 		}
 
-		[KSPEvent (guiActive = true, guiActiveEditor = true, guiName = "Switch Delay On")]
+		[KSPEvent (active = true, guiActive = true, guiActiveEditor = true, guiName = "Switch Delay On", name = "ToggleDelay")]
 		public void ToggleDelay ()
 		{
 			delayActive = !delayActive;
+			Debug.Log ("[ChuteDelay] toggle delay to: " + delayActive);
+			this.part.SendEvent("ToggleDelayUpdateUiString");
+		}
+
+		[KSPEvent (active = true, guiActive = false, guiActiveEditor = false, name="ToggleDelayUpdateUiString")]
+		public void ToggleDelayUpdateUiString ()
+		{
+			Debug.Log ("[ChuteDelay] display correct ui string");
 			if (delayActive) {
 				Events ["ToggleDelay"].guiName = "Switch Delay Off";
-			} else {
+			}
+			else {
 				Events ["ToggleDelay"].guiName = "Switch Delay On";
 			}
 		}
 
-		void SyncSettingsToSymParts ()
+		public void SyncSettingsToSymParts ()
 		{
-			foreach (Part part in this.part.symmetryCounterparts) {
-				foreach (PartModule module in part.Modules) {
-					if (module is ChuteDelay) {
-						var chuteSymModule = ((ChuteDelay)module);
-						chuteSymModule.delayActive = this.delayActive;
-						chuteSymModule.delayTime = this.delayTime;
-						break;
-					}
+			Debug.Log ("[ChuteDelay] Syncing to symmetry parts");
+			this.part.symmetryCounterparts.ForEach (
+				p => {
+					p.Modules.GetModules<ChuteDelay> ().ForEach (m => {
+						if(!m.Equals(this)){
+							m.delayActive = this.delayActive;
+							m.delayTime = this.delayTime;
+						}
+					});
+					p.SendEvent("ToggleDelayUpdateUiString");
 				}
-			}
+			);
+		}
 
+		public override void OnAwake ()
+		{
+			Debug.Log ("[ChuteDelay] register onPartActionUIDismiss");
+			GameEvents.onPartActionUIDismiss.Add (this.onPartActionUIDismiss);
+		}
+
+		public virtual void Destroy ()
+		{
+			Debug.Log ("[ChuteDelay] unregister onPartActionUIDismiss");
+			GameEvents.onPartActionUIDismiss.Remove (this.onPartActionUIDismiss);
+		}
+
+		protected virtual void onPartActionUIDismiss (Part data)
+		{
+			if (this.part != null && data == this.part) 
+			{
+				Debug.Log ("[ChuteDelay] Called on onPartActionUIDismiss");
+				SyncSettingsToSymParts ();
+			}
 		}
 	}
 }

@@ -26,6 +26,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="xcopy  &quot;${TargetFile}&quot; &quot;F:\SteamLibrary\SteamApps\common\Kerbal Space Program\GameData\Hooky\ChuteDelay&quot; /D /E /C /R /I /K /Y" workingdir="${SolutionDir}" />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

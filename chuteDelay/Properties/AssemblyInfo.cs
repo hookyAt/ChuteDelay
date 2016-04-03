@@ -5,10 +5,10 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle ("ChuteDelay")]
-[assembly: AssemblyDescription ("")]
+[assembly: AssemblyDescription ("A mod for KSP that adds a delay to your staged parachutes")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]
-[assembly: AssemblyProduct ("ChuteDelayLib")]
+[assembly: AssemblyProduct ("ChuteDelay")]
 [assembly: AssemblyCopyright ("hooky")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
