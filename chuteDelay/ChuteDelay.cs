@@ -46,5 +46,20 @@ namespace chuteDelay
 				Events ["ToggleDelay"].guiName = "Switch Delay On";
 			}
 		}
+
+		void SyncSettingsToSymParts ()
+		{
+			foreach (Part part in this.part.symmetryCounterparts) {
+				foreach (PartModule module in part.Modules) {
+					if (module is ChuteDelay) {
+						var chuteSymModule = ((ChuteDelay)module);
+						chuteSymModule.delayActive = this.delayActive;
+						chuteSymModule.delayTime = this.delayTime;
+						break;
+					}
+				}
+			}
+
+		}
 	}
 }
