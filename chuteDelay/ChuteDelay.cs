@@ -17,19 +17,34 @@ namespace chuteDelay
 		public override void OnActive ()
 		{
 			Debug.Log ("[ChuteDelay] Part " + this.name + " is OnActive");
-
 			if (delayActive) {
 				Debug.Log ("[ChuteDelay] Creating delay thread");
-				Thread delayThread = new Thread (new ThreadStart (this.DelayDeploy));
+				Thread delayThread = new Thread (new ThreadStart (this.DelayActive));
 				delayThread.Start ();
 				Debug.Log ("[ChuteDelay] Delay thread alive: " + delayThread.IsAlive);
 			} else {
 				Debug.Log ("[ChuteDelay] No Delay, call OnActive on base class" + this.name);
 				base.OnActive ();
 			}
+
 		}
 
-		public void DelayDeploy ()
+		[KSPAction ("Deploy w Delay")]
+		public void DeployWDelay (KSPActionParam param)
+		{
+			Debug.Log ("[ChuteDelay] Part " + this.name + " is Deploy");
+			if (delayActive) {
+				Debug.Log ("[ChuteDelay] Creating delay thread");
+				Thread delayThread = new Thread (new ThreadStart (this.DelayDeploy));
+				delayThread.Start ();
+				Debug.Log ("[ChuteDelay] Delay thread alive: " + delayThread.IsAlive);
+			} else {
+				Debug.Log ("[ChuteDelay] No Delay, call Deploy on base class" + this.name);
+				base.Deploy ();
+			}
+		}
+
+		public void DelayActive ()
 		{
 			float threadSleep = delayTime * 1000;
 			Thread.Sleep ((int)threadSleep);
@@ -37,22 +52,29 @@ namespace chuteDelay
 			base.OnActive ();
 		}
 
+		public void DelayDeploy ()
+		{
+			float threadSleep = delayTime * 1000;
+			Thread.Sleep ((int)threadSleep);
+			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call Deploy on base class" + this.name);
+			base.Deploy ();
+		}
+
 		[KSPEvent (active = true, guiActive = true, guiActiveEditor = true, guiName = "Switch Delay On", name = "ToggleDelay")]
 		public void ToggleDelay ()
 		{
 			delayActive = !delayActive;
 			Debug.Log ("[ChuteDelay] toggle delay to: " + delayActive);
-			this.part.SendEvent("ToggleDelayUpdateUiString");
+			ToggleDelayUpdateUiString ();
 		}
 
-		[KSPEvent (active = true, guiActive = false, guiActiveEditor = false, name="ToggleDelayUpdateUiString")]
+		[KSPEvent (active = true, guiActive = false, guiActiveEditor = false, name = "ToggleDelayUpdateUiString")]
 		public void ToggleDelayUpdateUiString ()
 		{
 			Debug.Log ("[ChuteDelay] display correct ui string");
 			if (delayActive) {
 				Events ["ToggleDelay"].guiName = "Switch Delay Off";
-			}
-			else {
+			} else {
 				Events ["ToggleDelay"].guiName = "Switch Delay On";
 			}
 		}
@@ -63,12 +85,12 @@ namespace chuteDelay
 			this.part.symmetryCounterparts.ForEach (
 				p => {
 					p.Modules.GetModules<ChuteDelay> ().ForEach (m => {
-						if(!m.Equals(this)){
+						if (!m.Equals (this)) {
 							m.delayActive = this.delayActive;
 							m.delayTime = this.delayTime;
 						}
 					});
-					p.SendEvent("ToggleDelayUpdateUiString");
+					p.SendEvent ("ToggleDelayUpdateUiString");
 				}
 			);
 		}
@@ -87,8 +109,7 @@ namespace chuteDelay
 
 		protected virtual void onPartActionUIDismiss (Part data)
 		{
-			if (this.part != null && data == this.part) 
-			{
+			if (this.part != null && this.part.vessel == null && data == this.part) {
 				Debug.Log ("[ChuteDelay] Called on onPartActionUIDismiss");
 				SyncSettingsToSymParts ();
 			}
