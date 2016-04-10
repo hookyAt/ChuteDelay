@@ -3,24 +3,24 @@ ChuteDelay
 
 ChuteDelay v1.0
 
-# SUMMARY
+## SUMMARY
 
 * ChuteDelay allows you to add a configurable delay to any attached parachute. After staging the parachute will delay its deployment until the configured time is up.
 	* e.g. until the burn time of the Sepratron I is over (about 5s)
 * ChuteDelay is more a karma plug-in since the “On-Rails” physics still apply's
 	* You can get more information on this wiki page (http://wiki.kerbalspaceprogram.com/wiki/Atmosphere#On-rails_physics).
 
-# REQUIREMENTS
+## REQUIREMENTS
 
 * Kerbal Space Program version 1.0.5
 * ModuleManager => 2.6.3
 	* You can get more information on this forum thread (http://forum.kerbalspaceprogram.com/index.php?/topic/50533-105-module-manager-2618-january-17th-with-even-more-sha-and-less-bug/)
 
-# INSTALLATION
+## INSTALLATION
 
 * Install as you normally install mods for Kerbal Space Program - by extracting the folder in this archive into the GameData folder in Kerbal Space Program's directory.
 
-## Folder Structure
+### Folder Structure
 
 * GameData
 	* ModuleManager.2.6.3.dll
@@ -29,7 +29,7 @@ ChuteDelay v1.0
 			* chuteDelay.cfg
 			* chuteDelay.dll
 
-# INSTRUCTIONS
+## INSTRUCTIONS
 
 * You can activate and assign delays for parachutes.
 	* right click on the parachute and choose a delay between 0 - 20 sec
@@ -41,12 +41,12 @@ ChuteDelay v1.0
 * There is no support for action groups. If activated with an action group the parachutes will deploy without delay.
 
 
-# TROUBLESHOOTING
+## TROUBLESHOOTING
 
 * If you notice anything behaving strangely, please check the debug log by hitting Alt-F12 and reporting any messages that might look applicable to the problem you are having on GitHub (https://github.com/hookyAt/ChuteDelay/issues).
 	* Lines from the Plugin start with [ChuteDelay]
 
-# LICENSE
+## LICENSE
 
 ChuteDelay Copyright (C) 2016, Daniel Hooker (hookyAt)
 
