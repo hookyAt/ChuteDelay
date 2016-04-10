@@ -38,7 +38,7 @@ Folder Structure
 	* parachute gets deployed after your delay
 
 * There is no support for symmetry parts, all parachutes have to be edited by hand.
-* There is no support for action groups. If activated with a action group the parachutes will deploy without delay.
+* There is no support for action groups. If activated with an action group the parachutes will deploy without delay.
 
 
 # TROUBLESHOOTING
@@ -49,12 +49,8 @@ Folder Structure
 # LICENSE
 
 ChuteDelay Copyright (C) 2016, Daniel Hooker (hookyAt)
-This program comes with ABSOLUTELY NO WARRANTY!
-This is free software, and you are welcome to redistribute it under certain conditions, as outlined in the full content of the GNU General Public License (GNU GPL), version 3, revision date 29 June 2007.
-
+	This program comes with ABSOLUTELY NO WARRANTY!
+	This is free software, and you are welcome to redistribute it under certain conditions, as outlined in the full content of the GNU General Public License (GNU GPL), version 3, revision date 29 June 2007.
     See attached LICENSE.md
 
-The above copyright notice and this permission notice shall be included in 
-all copies or substantial portions of the Software. 
-
-
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. 
