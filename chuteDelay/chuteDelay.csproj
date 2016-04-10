@@ -8,7 +8,7 @@
     <RootNamespace>chuteDelay</RootNamespace>
     <AssemblyName>chuteDelay</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>1.0</ReleaseVersion>
+    <ReleaseVersion>1.1</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,7 +29,7 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="xcopy  &quot;${TargetFile}&quot; &quot;F:\SteamLibrary\SteamApps\common\Kerbal Space Program\GameData\Hooky\ChuteDelay&quot; /D /E /C /R /I /K /Y" workingdir="${SolutionDir}" />
+        <Command type="AfterBuild" command="xcopy  &quot;${TargetFile}&quot; &quot;F:\SteamLibrary\SteamApps\common\Kerbal Space Program\GameData\Hooky\ChuteDelay&quot; /D /E /C /R /I /K /Y" workingdir="${SolutionDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>

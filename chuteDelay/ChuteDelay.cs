@@ -40,16 +40,11 @@ namespace chuteDelay
 		[KSPAction ("Deploy w Delay")]
 		public void DeployWDelay (KSPActionParam param)
 		{
-			Debug.Log ("[ChuteDelay] Part " + this.name + " is Deploy");
-			if (delayActive) {
-				Debug.Log ("[ChuteDelay] Creating delay thread");
-				Thread delayThread = new Thread (new ThreadStart (this.DelayDeploy));
-				delayThread.Start ();
-				Debug.Log ("[ChuteDelay] Delay thread alive: " + delayThread.IsAlive);
-			} else {
-				Debug.Log ("[ChuteDelay] No Delay, call Deploy on base class" + this.name);
-				base.Deploy ();
-			}
+			Debug.Log ("[ChuteDelay] Part " + this.name + " is Deploy -> always with delay");
+			Debug.Log ("[ChuteDelay] Creating delay thread");
+			Thread delayThread = new Thread (new ThreadStart (this.DelayDeploy));
+			delayThread.Start ();
+			Debug.Log ("[ChuteDelay] Delay thread alive: " + delayThread.IsAlive);
 		}
 
 		public void DelayActive ()

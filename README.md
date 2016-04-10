@@ -1,7 +1,7 @@
 ChuteDelay
 ==========
 
-ChuteDelay v1.0
+ChuteDelay v1.1
 
 ## SUMMARY
 
@@ -36,7 +36,6 @@ ChuteDelay v1.0
 	* click on "Switch Delay On"
 	* in flight decouple your stage
 	* parachute gets deployed after your delay
-
 * There is no support for symmetry parts, all parachutes have to be edited by hand.
 * There is no support for action groups. If activated with an action group the parachutes will deploy without delay.
 
