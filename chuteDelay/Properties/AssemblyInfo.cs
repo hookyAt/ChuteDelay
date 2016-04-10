@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]
 [assembly: AssemblyProduct ("ChuteDelayLib")]
-[assembly: AssemblyCopyright ("hooky")]
+[assembly: AssemblyCopyright ("Copyright (C) 2016, Daniel Hooker (hookyAt)")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 

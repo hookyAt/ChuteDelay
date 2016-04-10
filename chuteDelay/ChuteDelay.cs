@@ -1,4 +1,12 @@
-﻿using System;
+﻿//
+// <summary>
+// ChuteDelay Copyright (C) 2016, Daniel Hooker (hookyAt)
+// This program comes with ABSOLUTELY NO WARRANTY!
+// This is free software, and you are welcome to redistribute it under certain conditions, as outlined in the full content of the GNU General Public License (GNU GPL), version 3, revision date 29 June 2007.
+//
+// Source Code can be found at https://github.com/hookyAt/ChuteDelay
+//</summary>
+using System;
 using System.Threading;
 using UnityEngine;
 
@@ -9,9 +17,9 @@ namespace chuteDelay
 		[KSPField (isPersistant = true)]
 		public bool delayActive = false;
 
-		[UI_FloatRange (minValue = 0.0f, maxValue = 10f, stepIncrement = 0.1f)]
+		[UI_FloatRange (minValue = 0.0f, maxValue = 20f, stepIncrement = 0.1f)]
 		[KSPField (isPersistant = true, guiActiveEditor = true, guiActive = true, guiFormat = "F1", guiUnits = "sec", guiName = "Delay")]
-		public float delayTime = 2.0f;
+		public float delayTime = 5.0f;
 
 		public override void OnActive ()
 		{
