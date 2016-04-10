@@ -20,7 +20,7 @@ ChuteDelay v1.0
 
 * Install as you normally install mods for Kerbal Space Program - by extracting the folder in this archive into the GameData folder in Kerbal Space Program's directory.
 
-Folder Structure
+## Folder Structure
 
 * GameData
 	* ModuleManager.2.6.3.dll
