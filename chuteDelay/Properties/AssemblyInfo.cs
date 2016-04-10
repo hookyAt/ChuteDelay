@@ -8,8 +8,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription ("A mod for KSP that adds a delay to your staged parachutes")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]
-[assembly: AssemblyProduct ("ChuteDelay")]
-[assembly: AssemblyCopyright ("hooky")]
+[assembly: AssemblyProduct ("ChuteDelayLib")]
+[assembly: AssemblyCopyright ("Copyright (C) 2016, Daniel Hooker (hookyAt)")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 
