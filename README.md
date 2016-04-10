@@ -5,10 +5,13 @@ ChuteDelay v1.1
 
 ## SUMMARY
 
-* ChuteDelay allows you to add a configurable delay to any attached parachute. After staging the parachute will delay its deployment until the configured time is up.
-	* e.g. until the burn time of the Sepratron I is over (about 5s)
-* ChuteDelay is more a karma plug-in since the “On-Rails” physics still apply's
-	* You can get more information on this wiki page (http://wiki.kerbalspaceprogram.com/wiki/Atmosphere#On-rails_physics).
+ChuteDelay allows you to add a configurable delay to any attached parachute. After staging the parachute will delay its deployment until the configured time is up e.g. until the burn time of the Sepratron I is over (about 5s).
+
+So now you when drop your burnt out stages with a parachute it will deploy at a safe distance. Or you can time the burn time of your  sepratron engines. So that the exhaust stream does not destroy the chute.
+
+ChuteDelay is more a **karma** mod since the “On-Rails” physics still apply's. Meaning that all Vessels when they no longer are the primary focus of the simulation, will be unloaded after a certain distance (about 23km) when the atmospheric pressure is greater than 0.01 atm.
+
+You can get more information on this wiki page (http://wiki.kerbalspaceprogram.com/wiki/Atmosphere#On-rails_physics).
 
 ## REQUIREMENTS
 
@@ -36,9 +39,17 @@ ChuteDelay v1.1
 	* click on "Switch Delay On"
 	* in flight decouple your stage
 	* parachute gets deployed after your delay
-* There is no support for symmetry parts, all parachutes have to be edited by hand.
-* There is no support for action groups. If activated with an action group the parachutes will deploy without delay.
+* Symmetry parts now synchronize their changes in the VAB/SPH
+	* In flight the changes are not synchronized
+* There is an action group "Deploy w Delay" it respects the delay of each parachute, ignores the activated attribute
 
+## CHANGES
+
+Since Version 1.0
+* Settings are synchronize to their symmetry parts
+	* only apply's when in the VAB/SPH
+* Parachutes have a new action group "Deploy w Delay".
+	* if "deploy w delay" is used, there is no checking it the delay is activated. It will use the last configured delay saved in the persistence file.
 
 ## TROUBLESHOOTING
 
