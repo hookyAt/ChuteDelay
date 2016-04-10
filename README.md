@@ -9,15 +9,15 @@ ChuteDelay allows you to add a configurable delay to any attached parachute. Aft
 
 So now you when drop your burnt out stages with a parachute it will deploy at a safe distance. Or you can time the burn time of your  sepratron engines. So that the exhaust stream does not destroy the chute.
 
-ChuteDelay is more a **karma** mod since the “On-Rails” physics still apply's. Meaning that all Vessels when they no longer are the primary focus of the simulation, will be unloaded after a certain distance (about 23km) when the atmospheric pressure is greater than 0.01 atm.
+ChuteDelay is more a **karma** mod since the "On-Rails" physics still apply's. Meaning that all Vessels when they no longer are the primary focus of the simulation, will be unloaded after a certain distance (about 23km) when the atmospheric pressure is greater than 0.01 atm.
 
-You can get more information on this wiki page (http://wiki.kerbalspaceprogram.com/wiki/Atmosphere#On-rails_physics).
+You can get more information on this [wiki page] (http://wiki.kerbalspaceprogram.com/wiki/Atmosphere#On-rails_physics).
 
 ## REQUIREMENTS
 
 * Kerbal Space Program version 1.0.5
 * ModuleManager => 2.6.3
-	* You can get more information on this forum thread (http://forum.kerbalspaceprogram.com/index.php?/topic/50533-105-module-manager-2618-january-17th-with-even-more-sha-and-less-bug/)
+	* You can get more information on this [forum thread] (http://forum.kerbalspaceprogram.com/index.php?/topic/50533-105-module-manager-2618-january-17th-with-even-more-sha-and-less-bug/)
 
 ## INSTALLATION
 
