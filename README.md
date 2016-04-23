@@ -44,13 +44,17 @@ You can get more information on this [wiki page] (http://wiki.kerbalspaceprogram
 * There is an action group "Deploy w Delay" it respects the delay of each parachute, ignores the activated attribute
 
 ## CHANGES
-Since Version 1.1
+Version 1.2
 * made ready for KSP 1.1.0
-Since Version 1.0
+
+Version 1.1
 * Settings are synchronize to their symmetry parts
 	* only apply's when in the VAB/SPH
 * Parachutes have a new action group "Deploy w Delay".
 	* if "deploy w delay" is used, there is no checking it the delay is activated. It will use the last configured delay saved in the persistence file.
+
+Version 1.0
+* Initial Implementation
 
 ## TROUBLESHOOTING
 
