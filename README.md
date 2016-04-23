@@ -1,7 +1,7 @@
 ChuteDelay
 ==========
 
-ChuteDelay v1.1
+ChuteDelay v1.2
 
 ## SUMMARY
 
@@ -15,8 +15,8 @@ You can get more information on this [wiki page] (http://wiki.kerbalspaceprogram
 
 ## REQUIREMENTS
 
-* Kerbal Space Program version 1.0.5
-* ModuleManager => 2.6.3
+* Kerbal Space Program version 1.1.0
+* ModuleManager => 2.6.22
 	* You can get more information on this [forum thread] (http://forum.kerbalspaceprogram.com/index.php?/topic/50533-105-module-manager-2618-january-17th-with-even-more-sha-and-less-bug/)
 
 ## INSTALLATION
@@ -26,7 +26,7 @@ You can get more information on this [wiki page] (http://wiki.kerbalspaceprogram
 ### Folder Structure
 
 * GameData
-	* ModuleManager.2.6.3.dll
+	* ModuleManager.2.6.22.dll
 	* hooky
 		* ChuteDelay
 			* chuteDelay.cfg
@@ -44,7 +44,8 @@ You can get more information on this [wiki page] (http://wiki.kerbalspaceprogram
 * There is an action group "Deploy w Delay" it respects the delay of each parachute, ignores the activated attribute
 
 ## CHANGES
-
+Since Version 1.1
+* made ready for KSP 1.1.0
 Since Version 1.0
 * Settings are synchronize to their symmetry parts
 	* only apply's when in the VAB/SPH
