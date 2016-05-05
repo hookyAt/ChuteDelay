@@ -15,11 +15,16 @@ namespace chuteDelay
 {
 	public class ChuteDelay : ModuleParachute
 	{
-		[KSPField (isPersistant = true)]
+		[KSPField(guiName = "Delay", isPersistant = true, guiActive = true), 
+			UI_Toggle(disabledText = "Off", scene = UI_Scene.All, enabledText = "On", affectSymCounterparts = UI_Scene.All)]
 		public bool delayActive = false;
 
-		[UI_FloatRange (minValue = 0.0f, maxValue = 20f, stepIncrement = 0.1f)]
-		[KSPField (isPersistant = true, guiActiveEditor = true, guiActive = true, guiFormat = "F1", guiUnits = "sec", guiName = "Delay")]
+		[KSPField(guiName = "Deploy When", isPersistant = true, guiActive = true), 
+			UI_Toggle(disabledText = "Unsafe", scene = UI_Scene.All, enabledText = "Safe", affectSymCounterparts = UI_Scene.All)]
+		public bool deployWhenSafe = false;
+
+		[KSPField (isPersistant = true, guiActiveEditor = true, guiActive = true, guiFormat = "F1", guiUnits = "sec", guiName = "Delay Time"), 
+			UI_FloatRange (minValue = 0.0f, maxValue = 20f, stepIncrement = 0.1f, affectSymCounterparts = UI_Scene.All)]
 		public float delayTime = 5.0f;
 
 		public override void OnActive ()
@@ -52,6 +57,7 @@ namespace chuteDelay
 			float threadSleep = delayTime * 1000;
 			Thread.Sleep ((int)threadSleep);
 			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call OnActive on base class" + this.name);
+			DeployWhenSafe ();
 			base.OnActive ();
 		}
 
@@ -60,62 +66,30 @@ namespace chuteDelay
 			float threadSleep = delayTime * 1000;
 			Thread.Sleep ((int)threadSleep);
 			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call Deploy on base class" + this.name);
+			DeployWhenSafe ();
 			base.Deploy ();
 		}
 
-		[KSPEvent (active = true, guiActive = true, guiActiveEditor = true, guiName = "Switch Delay On", name = "ToggleDelay")]
-		public void ToggleDelay ()
+		private void DeployWhenSafe ()
 		{
-			delayActive = !delayActive;
-			Debug.Log ("[ChuteDelay] toggle delay to: " + delayActive);
-			ToggleDelayUpdateUiString ();
-		}
-
-		[KSPEvent (active = true, guiActive = false, guiActiveEditor = false, name = "ToggleDelayUpdateUiString")]
-		public void ToggleDelayUpdateUiString ()
-		{
-			Debug.Log ("[ChuteDelay] display correct ui string");
-			if (delayActive) {
-				Events ["ToggleDelay"].guiName = "Switch Delay Off";
-			} else {
-				Events ["ToggleDelay"].guiName = "Switch Delay On";
-			}
-		}
-
-		public void SyncSettingsToSymParts ()
-		{
-			Debug.Log ("[ChuteDelay] Syncing to symmetry parts");
-			this.part.symmetryCounterparts.ForEach (
-				p => {
-					p.Modules.GetModules<ChuteDelay> ().ForEach (m => {
-						if (!m.Equals (this)) {
-							m.delayActive = this.delayActive;
-							m.delayTime = this.delayTime;
-						}
-					});
-					p.SendEvent ("ToggleDelayUpdateUiString");
+			if (deployWhenSafe) {
+				while (true) {
+					if (this.deploymentSafeState != deploymentSafeStates.SAFE) {
+						Debug.Log ("[ChuteDelay] not safe " + this.name);
+					} else {
+						Debug.Log ("[ChuteDelay] safe, stop waiting " + this.name);
+						break;
+					}
+					Sleep ();
 				}
-			);
-		}
-
-		public override void OnAwake ()
-		{
-			Debug.Log ("[ChuteDelay] register onPartActionUIDismiss");
-			GameEvents.onPartActionUIDismiss.Add (this.onPartActionUIDismiss);
-		}
-
-		public virtual void Destroy ()
-		{
-			Debug.Log ("[ChuteDelay] unregister onPartActionUIDismiss");
-			GameEvents.onPartActionUIDismiss.Remove (this.onPartActionUIDismiss);
-		}
-
-		protected virtual void onPartActionUIDismiss (Part data)
-		{
-			if (this.part != null && this.part.vessel == null && data == this.part) {
-				Debug.Log ("[ChuteDelay] Called on onPartActionUIDismiss");
-				SyncSettingsToSymParts ();
 			}
 		}
+
+		private void Sleep ()
+		{
+			Debug.Log ("[ChuteDelay] sleep " + this.name);
+			Thread.Sleep (1000);
+		}
+			
 	}
 }
