@@ -30,6 +30,7 @@
     <CustomCommands>
       <CustomCommands>
         <Command type="AfterBuild" command="xcopy  &quot;${TargetFile}&quot; &quot;F:\SteamLibrary\SteamApps\common\Kerbal Space Program\GameData\Hooky\ChuteDelay&quot; /D /E /C /R /I /K /Y" workingdir="${SolutionDir}" externalConsole="True" />
+        <Command type="AfterBuild" command="xcopy  &quot;${ProjectDir}\Resources\chuteDelay.cfg&quot; &quot;F:\SteamLibrary\SteamApps\common\Kerbal Space Program\GameData\Hooky\ChuteDelay&quot; /D /E /C /R /I /K /Y" workingdir="${SolutionDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -62,4 +63,10 @@
     <Compile Include="ChuteDelay.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chuteDelay.cfg" />
+  </ItemGroup>
 </Project>

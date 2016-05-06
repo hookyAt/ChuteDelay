@@ -15,106 +15,89 @@ namespace chuteDelay
 {
 	public class ChuteDelay : ModuleParachute
 	{
-		[KSPField (isPersistant = true)]
+		[KSPField (guiName = "Delay", isPersistant = true, guiActive = true), 
+			UI_Toggle (disabledText = "Off", scene = UI_Scene.All, enabledText = "On", affectSymCounterparts = UI_Scene.All)]
 		public bool delayActive = false;
 
-		[UI_FloatRange (minValue = 0.0f, maxValue = 20f, stepIncrement = 0.1f)]
-		[KSPField (isPersistant = true, guiActiveEditor = true, guiActive = true, guiFormat = "F1", guiUnits = "sec", guiName = "Delay")]
+		[KSPField (guiName = "Deploy when", isPersistant = true, guiActive = true), 
+			UI_Toggle (disabledText = "Unsafe", scene = UI_Scene.All, enabledText = "Safe", affectSymCounterparts = UI_Scene.All)]
+		public bool deployWhenSafe = false;
+
+		[KSPField (guiName = "Deploy Airbrakes", isPersistant = true, guiActive = true), 
+			UI_Toggle (disabledText = "No", scene = UI_Scene.All, enabledText = "Yes", affectSymCounterparts = UI_Scene.All)]
+		public bool deployAirbrakes = false;
+
+		[KSPField (isPersistant = true, guiActiveEditor = true, guiActive = true, guiFormat = "F1", guiUnits = "sec", guiName = "Delay Time"), 
+			UI_FloatRange (minValue = 0.0f, maxValue = 20f, stepIncrement = 0.1f, affectSymCounterparts = UI_Scene.All)]
 		public float delayTime = 5.0f;
 
 		public override void OnActive ()
 		{
-			Debug.Log ("[ChuteDelay] Part " + this.name + " is OnActive");
+			Debug.Log ("[ChuteDelay] part " + this.name + " is OnActive");
 			if (delayActive) {
-				Debug.Log ("[ChuteDelay] Creating delay thread");
-				Thread delayThread = new Thread (new ThreadStart (this.DelayActive));
+				Debug.Log ("[ChuteDelay] creating delay thread");
+				Thread delayThread = new Thread (new ThreadStart (this.DelayOnActive));
 				delayThread.Start ();
-				Debug.Log ("[ChuteDelay] Delay thread alive: " + delayThread.IsAlive);
+				Debug.Log ("[ChuteDelay] delay thread alive: " + delayThread.IsAlive);
 			} else {
-				Debug.Log ("[ChuteDelay] No Delay, call OnActive on base class" + this.name);
+				Debug.Log ("[ChuteDelay] no delay, call base.OnActive on base class" + this.name);
 				base.OnActive ();
 			}
 
 		}
 
 		[KSPAction ("Deploy w Delay")]
-		public void DeployWDelay (KSPActionParam param)
+		public void ActionDeployWithDelay (KSPActionParam param)
 		{
-			Debug.Log ("[ChuteDelay] Part " + this.name + " is Deploy -> always with delay");
-			Debug.Log ("[ChuteDelay] Creating delay thread");
-			Thread delayThread = new Thread (new ThreadStart (this.DelayDeploy));
+			Debug.Log ("[ChuteDelay] action deploy w delay active " + this.name);
+			Debug.Log ("[ChuteDelay] creating delay thread");
+			Thread delayThread = new Thread (new ThreadStart (this.DelayActionDeploy));
 			delayThread.Start ();
-			Debug.Log ("[ChuteDelay] Delay thread alive: " + delayThread.IsAlive);
+			Debug.Log ("[ChuteDelay] delay thread alive: " + delayThread.IsAlive);
 		}
 
-		public void DelayActive ()
+		public void DelayOnActive ()
 		{
 			float threadSleep = delayTime * 1000;
 			Thread.Sleep ((int)threadSleep);
-			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call OnActive on base class" + this.name);
+			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call base.OnActive on base class" + this.name);
+			DeployAirbrakes ();
+			DeployWhenSafe ();
 			base.OnActive ();
 		}
 
-		public void DelayDeploy ()
+		public void DelayActionDeploy ()
 		{
 			float threadSleep = delayTime * 1000;
 			Thread.Sleep ((int)threadSleep);
-			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call Deploy on base class" + this.name);
+			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call base.Deploy on base class" + this.name);
+			DeployAirbrakes ();
+			DeployWhenSafe ();
 			base.Deploy ();
 		}
 
-		[KSPEvent (active = true, guiActive = true, guiActiveEditor = true, guiName = "Switch Delay On", name = "ToggleDelay")]
-		public void ToggleDelay ()
+		private void DeployWhenSafe ()
 		{
-			delayActive = !delayActive;
-			Debug.Log ("[ChuteDelay] toggle delay to: " + delayActive);
-			ToggleDelayUpdateUiString ();
-		}
-
-		[KSPEvent (active = true, guiActive = false, guiActiveEditor = false, name = "ToggleDelayUpdateUiString")]
-		public void ToggleDelayUpdateUiString ()
-		{
-			Debug.Log ("[ChuteDelay] display correct ui string");
-			if (delayActive) {
-				Events ["ToggleDelay"].guiName = "Switch Delay Off";
-			} else {
-				Events ["ToggleDelay"].guiName = "Switch Delay On";
+			if (deployWhenSafe) {
+				while (true) {
+					if (this.deploymentSafeState == deploymentSafeStates.SAFE) {
+						Debug.Log ("[ChuteDelay] safe, stop waiting " + this.name);
+						break;
+					}
+					Thread.Sleep (1000);
+				}
 			}
 		}
 
-		public void SyncSettingsToSymParts ()
+		private void DeployAirbrakes ()
 		{
-			Debug.Log ("[ChuteDelay] Syncing to symmetry parts");
-			this.part.symmetryCounterparts.ForEach (
-				p => {
-					p.Modules.GetModules<ChuteDelay> ().ForEach (m => {
-						if (!m.Equals (this)) {
-							m.delayActive = this.delayActive;
-							m.delayTime = this.delayTime;
-						}
-					});
-					p.SendEvent ("ToggleDelayUpdateUiString");
-				}
-			);
-		}
-
-		public override void OnAwake ()
-		{
-			Debug.Log ("[ChuteDelay] register onPartActionUIDismiss");
-			GameEvents.onPartActionUIDismiss.Add (this.onPartActionUIDismiss);
-		}
-
-		public virtual void Destroy ()
-		{
-			Debug.Log ("[ChuteDelay] unregister onPartActionUIDismiss");
-			GameEvents.onPartActionUIDismiss.Remove (this.onPartActionUIDismiss);
-		}
-
-		protected virtual void onPartActionUIDismiss (Part data)
-		{
-			if (this.part != null && this.part.vessel == null && data == this.part) {
-				Debug.Log ("[ChuteDelay] Called on onPartActionUIDismiss");
-				SyncSettingsToSymParts ();
+			if (deployAirbrakes) {
+				Debug.Log ("[ChuteDelay] find all airbrakes on vessel " + this.name);
+				vessel.parts.ForEach (p => p.Modules.GetModules<ModuleAeroSurface> ().ForEach (a => {
+					a.deploy = true;
+					a.part.SendEvent ("deploy");
+					Debug.Log ("[ChuteDelay] deploy airbrakes " + this.name);
+				}));
 			}
 		}
 	}
