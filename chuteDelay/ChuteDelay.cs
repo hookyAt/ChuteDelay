@@ -20,7 +20,7 @@ namespace chuteDelay
 			UI_Toggle (disabledText = "Off", scene = UI_Scene.All, enabledText = "On", affectSymCounterparts = UI_Scene.All)]
 		public bool delayActive = false;
 
-		[KSPField (guiName = "Deploy When", isPersistant = true, guiActive = true), 
+		[KSPField (guiName = "Deploy when", isPersistant = true, guiActive = true), 
 			UI_Toggle (disabledText = "Unsafe", scene = UI_Scene.All, enabledText = "Safe", affectSymCounterparts = UI_Scene.All)]
 		public bool deployWhenSafe = false;
 
@@ -28,52 +28,58 @@ namespace chuteDelay
 			UI_Toggle (disabledText = "No", scene = UI_Scene.All, enabledText = "Yes", affectSymCounterparts = UI_Scene.All)]
 		public bool deployAirbrakes = false;
 
+		[KSPField (guiName = "Deploy Landing Legs", isPersistant = true, guiActive = true), 
+			UI_Toggle (disabledText = "No", scene = UI_Scene.All, enabledText = "Yes", affectSymCounterparts = UI_Scene.All)]
+		public bool deployLandingLegs = false;
+
 		[KSPField (isPersistant = true, guiActiveEditor = true, guiActive = true, guiFormat = "F1", guiUnits = "sec", guiName = "Delay Time"), 
 			UI_FloatRange (minValue = 0.0f, maxValue = 20f, stepIncrement = 0.1f, affectSymCounterparts = UI_Scene.All)]
 		public float delayTime = 5.0f;
 
 		public override void OnActive ()
 		{
-			Debug.Log ("[ChuteDelay] Part " + this.name + " is OnActive");
+			Debug.Log ("[ChuteDelay] part " + this.name + " is OnActive");
 			if (delayActive) {
-				Debug.Log ("[ChuteDelay] Creating delay thread");
-				Thread delayThread = new Thread (new ThreadStart (this.DelayActive));
+				Debug.Log ("[ChuteDelay] creating delay thread");
+				Thread delayThread = new Thread (new ThreadStart (this.DelayOnActive));
 				delayThread.Start ();
-				Debug.Log ("[ChuteDelay] Delay thread alive: " + delayThread.IsAlive);
+				Debug.Log ("[ChuteDelay] delay thread alive: " + delayThread.IsAlive);
 			} else {
-				Debug.Log ("[ChuteDelay] No Delay, call OnActive on base class" + this.name);
+				Debug.Log ("[ChuteDelay] no delay, call base.OnActive on base class" + this.name);
 				base.OnActive ();
 			}
 
 		}
 
 		[KSPAction ("Deploy w Delay")]
-		public void DeployWDelay (KSPActionParam param)
+		public void ActionDeployWithDelay (KSPActionParam param)
 		{
-			Debug.Log ("[ChuteDelay] Part " + this.name + " is Deploy -> always with delay");
-			Debug.Log ("[ChuteDelay] Creating delay thread");
-			Thread delayThread = new Thread (new ThreadStart (this.DelayDeploy));
+			Debug.Log ("[ChuteDelay] action deploy w delay active " + this.name);
+			Debug.Log ("[ChuteDelay] creating delay thread");
+			Thread delayThread = new Thread (new ThreadStart (this.DelayActionDeploy));
 			delayThread.Start ();
-			Debug.Log ("[ChuteDelay] Delay thread alive: " + delayThread.IsAlive);
+			Debug.Log ("[ChuteDelay] delay thread alive: " + delayThread.IsAlive);
 		}
 
-		public void DelayActive ()
+		public void DelayOnActive ()
 		{
 			float threadSleep = delayTime * 1000;
 			Thread.Sleep ((int)threadSleep);
-			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call OnActive on base class" + this.name);
+			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call base.OnActive on base class" + this.name);
 			DeployAirbrakes ();
 			DeployWhenSafe ();
+			DeployLandingLegs ();
 			base.OnActive ();
 		}
 
-		public void DelayDeploy ()
+		public void DelayActionDeploy ()
 		{
 			float threadSleep = delayTime * 1000;
 			Thread.Sleep ((int)threadSleep);
-			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call Deploy on base class" + this.name);
+			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call base.Deploy on base class" + this.name);
 			DeployAirbrakes ();
 			DeployWhenSafe ();
+			DeployLandingLegs ();
 			base.Deploy ();
 		}
 
@@ -81,9 +87,7 @@ namespace chuteDelay
 		{
 			if (deployWhenSafe) {
 				while (true) {
-					if (this.deploymentSafeState != deploymentSafeStates.SAFE) {
-						Debug.Log ("[ChuteDelay] not safe " + this.name);
-					} else {
+					if (this.deploymentSafeState == deploymentSafeStates.SAFE) {
 						Debug.Log ("[ChuteDelay] safe, stop waiting " + this.name);
 						break;
 					}
@@ -95,13 +99,35 @@ namespace chuteDelay
 		private void DeployAirbrakes ()
 		{
 			if (deployAirbrakes) {
-				Debug.Log ("[ChuteDelay] find all Airbrakes on vessel " + this.name);
+				Debug.Log ("[ChuteDelay] find all airbrakes on vessel " + this.name);
 				vessel.parts.ForEach (p => p.Modules.GetModules<ModuleAeroSurface> ().ForEach (a => {
 					a.deploy = true;
 					a.part.SendEvent ("deploy");
+					Debug.Log ("[ChuteDelay] deploy airbrakes " + this.name);
 				}));
 			}
 		}
 
+		private void DeployLandingLegs ()
+		{
+			if (deployLandingLegs) {
+				Debug.Log ("[ChuteDelay] find all landinglegs on vessel " + this.name);
+				foreach (Part vesselPart in vessel.parts) {
+					foreach (ModuleWheelDeployment deployModule in vesselPart.Modules.GetModules<ModuleWheelDeployment> ()) {
+						if (isLandingLegNotDeployed (deployModule)) {
+							deployModule.part.SendEvent ("EventToggle");
+							Debug.Log ("[ChuteDelay] deploy landing legs " + vesselPart.name);
+							return;
+						}
+						Debug.Log ("[ChuteDelay] landing legs already deployed " + vesselPart.name);
+					}
+				}
+			}
+		}
+
+		private bool isLandingLegNotDeployed (ModuleWheelDeployment deployModule)
+		{
+			return deployModule.fsm.CurrentState != deployModule.st_deployed;
+		}
 	}
 }
