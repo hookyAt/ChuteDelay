@@ -10,18 +10,23 @@ using System;
 using System.Threading;
 using UnityEngine;
 using System.Collections.Generic;
+using ModuleWheels;
 
 namespace chuteDelay
 {
 	public class ChuteDelay : ModuleParachute
 	{
-		[KSPField(guiName = "Delay", isPersistant = true, guiActive = true), 
-			UI_Toggle(disabledText = "Off", scene = UI_Scene.All, enabledText = "On", affectSymCounterparts = UI_Scene.All)]
+		[KSPField (guiName = "Delay", isPersistant = true, guiActive = true), 
+			UI_Toggle (disabledText = "Off", scene = UI_Scene.All, enabledText = "On", affectSymCounterparts = UI_Scene.All)]
 		public bool delayActive = false;
 
-		[KSPField(guiName = "Deploy When", isPersistant = true, guiActive = true), 
-			UI_Toggle(disabledText = "Unsafe", scene = UI_Scene.All, enabledText = "Safe", affectSymCounterparts = UI_Scene.All)]
+		[KSPField (guiName = "Deploy When", isPersistant = true, guiActive = true), 
+			UI_Toggle (disabledText = "Unsafe", scene = UI_Scene.All, enabledText = "Safe", affectSymCounterparts = UI_Scene.All)]
 		public bool deployWhenSafe = false;
+
+		[KSPField (guiName = "Deploy Airbrakes", isPersistant = true, guiActive = true), 
+			UI_Toggle (disabledText = "No", scene = UI_Scene.All, enabledText = "Yes", affectSymCounterparts = UI_Scene.All)]
+		public bool deployAirbrakes = false;
 
 		[KSPField (isPersistant = true, guiActiveEditor = true, guiActive = true, guiFormat = "F1", guiUnits = "sec", guiName = "Delay Time"), 
 			UI_FloatRange (minValue = 0.0f, maxValue = 20f, stepIncrement = 0.1f, affectSymCounterparts = UI_Scene.All)]
@@ -57,6 +62,7 @@ namespace chuteDelay
 			float threadSleep = delayTime * 1000;
 			Thread.Sleep ((int)threadSleep);
 			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call OnActive on base class" + this.name);
+			DeployAirbrakes ();
 			DeployWhenSafe ();
 			base.OnActive ();
 		}
@@ -66,6 +72,7 @@ namespace chuteDelay
 			float threadSleep = delayTime * 1000;
 			Thread.Sleep ((int)threadSleep);
 			Debug.Log ("[ChuteDelay] waited " + threadSleep + " ms, call Deploy on base class" + this.name);
+			DeployAirbrakes ();
 			DeployWhenSafe ();
 			base.Deploy ();
 		}
@@ -80,16 +87,21 @@ namespace chuteDelay
 						Debug.Log ("[ChuteDelay] safe, stop waiting " + this.name);
 						break;
 					}
-					Sleep ();
+					Thread.Sleep (1000);
 				}
 			}
 		}
 
-		private void Sleep ()
+		private void DeployAirbrakes ()
 		{
-			Debug.Log ("[ChuteDelay] sleep " + this.name);
-			Thread.Sleep (1000);
+			if (deployAirbrakes) {
+				Debug.Log ("[ChuteDelay] find all Airbrakes on vessel " + this.name);
+				vessel.parts.ForEach (p => p.Modules.GetModules<ModuleAeroSurface> ().ForEach (a => {
+					a.deploy = true;
+					a.part.SendEvent ("deploy");
+				}));
+			}
 		}
-			
+
 	}
 }
