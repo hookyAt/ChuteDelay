@@ -1,7 +1,7 @@
 ChuteDelay
 ==========
 
-ChuteDelay v1.2
+ChuteDelay v1.4
 
 ## SUMMARY
 
