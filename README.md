@@ -66,6 +66,8 @@ So if you want that your stages to survive you have to ride along. See the Kerba
 ## CHANGES
 Version 1.4
 * made ready for KSP 1.2
+* some code clean up
+
 Version 1.3
 * added a new option Deploy when Safe
 * added a new option Deploy Airbrakes
