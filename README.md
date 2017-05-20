@@ -70,6 +70,7 @@ Version 1.5
 
 Version 1.4
 * made ready for KSP 1.2
+* some code clean up
 
 Version 1.3
 * added a new option Deploy when Safe
