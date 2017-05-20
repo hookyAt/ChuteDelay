@@ -29,8 +29,18 @@
     <ConsolePause>false</ConsolePause>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="xcopy  &quot;${TargetFile}&quot; &quot;F:\SteamLibrary\SteamApps\common\Kerbal Space Program\GameData\Hooky\ChuteDelay&quot; /D /E /C /R /I /K /Y" workingdir="${SolutionDir}" externalConsole="True" />
-        <Command type="AfterBuild" command="xcopy  &quot;${ProjectDir}\Resources\chuteDelay.cfg&quot; &quot;F:\SteamLibrary\SteamApps\common\Kerbal Space Program\GameData\Hooky\ChuteDelay&quot; /D /E /C /R /I /K /Y" workingdir="${SolutionDir}" externalConsole="True" />
+        <Command>
+          <type>AfterBuild</type>
+          <command>xcopy  "${TargetFile}" "F:\SteamLibrary\SteamApps\common\Kerbal Space Program\GameData\Hooky\ChuteDelay" /D /E /C /R /I /K /Y</command>
+          <workingdir>${SolutionDir}</workingdir>
+          <externalConsole>True</externalConsole>
+        </Command>
+        <Command>
+          <type>AfterBuild</type>
+          <command>xcopy  "${ProjectDir}\Resources\chuteDelay.cfg" "F:\SteamLibrary\SteamApps\common\Kerbal Space Program\GameData\Hooky\ChuteDelay" /D /E /C /R /I /K /Y</command>
+          <workingdir>${SolutionDir}</workingdir>
+          <externalConsole>True</externalConsole>
+        </Command>
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -53,9 +63,6 @@
     </Reference>
     <Reference Include="Assembly-UnityScript-firstpass">
       <HintPath>F:\SteamLibrary\SteamApps\common\Kerbal Space Program\KSP_Data\Managed\Assembly-UnityScript-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="KSPUtil">
-      <HintPath>F:\SteamLibrary\SteamApps\common\Kerbal Space Program\KSP_Data\Managed\KSPUtil.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
