@@ -1,7 +1,7 @@
 ChuteDelay
 ==========
 
-ChuteDelay v1.5
+ChuteDelay v1.6
 
 ## SUMMARY
 
@@ -24,8 +24,8 @@ So if you want that your stages to survive you have to ride along. See the Kerba
 
 ## REQUIREMENTS
 
-* Kerbal Space Program version 1.2.2
-* ModuleManager => 2.7.5
+* Kerbal Space Program version 1.3
+* ModuleManager => 2.8.0
 	* You can get more information on this [forum thread] (http://forum.kerbalspaceprogram.com/index.php?/topic/50533-105-module-manager-2618-january-17th-with-even-more-sha-and-less-bug/)
 
 ## INSTALLATION
@@ -35,7 +35,7 @@ So if you want that your stages to survive you have to ride along. See the Kerba
 ### Folder Structure
 
 * GameData
-	* ModuleManager.2.7.5.dll
+	* ModuleManager.2.8.0.dll
 	* hooky
 		* ChuteDelay
 			* chuteDelay.cfg
@@ -64,6 +64,9 @@ So if you want that your stages to survive you have to ride along. See the Kerba
 * Symmetry parts synchronize their changes all times
 
 ## CHANGES
+
+Version 1.6
+* recompile for KSP 1.3
 
 Version 1.5
 * recompile for KSP 1.2.2
